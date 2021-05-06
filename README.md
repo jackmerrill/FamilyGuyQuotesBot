@@ -2,6 +2,9 @@
 # Family Guy Discord Quotes
 
 A simple Discord bot that uses Slash Commands to pick a random Family Guy quote from various main characters.
+
+Add the bot [here](https://discord.com/oauth2/authorize?client_id=839624581055774741&permissions=2048&scope=bot%20applications.commands)!
+
 ## Contributing
 
 Contributions are always welcome! Feel free to add your own quotes by making a pull request.
