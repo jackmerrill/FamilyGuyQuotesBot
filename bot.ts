@@ -83,7 +83,7 @@ client.on('ready', () => {
             ],
           },
         ],
-      }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+      }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
   } else {
   // @ts-ignore
     client.application.commands
@@ -136,7 +136,7 @@ client.on('ready', () => {
             ],
           },
         ],
-      }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+      }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
   }
 });
 
