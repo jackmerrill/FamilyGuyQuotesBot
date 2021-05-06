@@ -22,6 +22,11 @@ const nameMap = {
   lois: 'Lois Griffin',
   chris: 'Chris Griffin',
   meg: 'Meg Griffin',
+  stewie: 'Stewie Griffin',
+  brian: 'Brian Griffin',
+  cleveland: 'Cleveland Brown',
+  quagmire: 'Glenn Quagmire',
+  joe: 'Joe Swanson',
 };
 
 log.info('Starting bot...');
