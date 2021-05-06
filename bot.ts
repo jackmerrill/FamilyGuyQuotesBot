@@ -33,120 +33,116 @@ log.info('Starting bot...');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES] });
 
-client.on('ready', () => {
+client.on('ready', async () => {
   log.info('Bot Started!');
 
   if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
-    client.guilds.cache.get('468920088817565717').commands
-      .create({
-        name: 'quote',
-        description: 'Get a random quote from Family Guy!',
-        options: [
-          {
-            name: 'Character',
-            description: 'A Character from the show',
-            type: 'STRING',
-            required: false,
-            choices: [
-              {
-                name: 'Peter',
-                value: 'peter',
-              },
-              {
-                name: 'Lois',
-                value: 'lois',
-              },
-              {
-                name: 'Chris',
-                value: 'chris',
-              },
-              {
-                name: 'Meg',
-                value: 'meg',
-              },
-              {
-                name: 'Stewie',
-                value: 'stewie',
-              },
-              {
-                name: 'Brian',
-                value: 'brian',
-              },
-              {
-                name: 'Cleveland',
-                value: 'cleveland',
-              },
-              {
-                name: 'Quagmire',
-                value: 'quagmire',
-              },
-              {
-                name: 'Joe',
-                value: 'joe',
-              },
-            ],
-          },
-        ],
-      }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+    client.guilds.cache.get('468920088817565717')?.commands.create({
+      name: 'quote',
+      description: 'Get a random quote from Family Guy!',
+      options: [
+        {
+          name: 'Character',
+          description: 'A Character from the show',
+          type: 'STRING',
+          required: false,
+          choices: [
+            {
+              name: 'Peter',
+              value: 'peter',
+            },
+            {
+              name: 'Lois',
+              value: 'lois',
+            },
+            {
+              name: 'Chris',
+              value: 'chris',
+            },
+            {
+              name: 'Meg',
+              value: 'meg',
+            },
+            {
+              name: 'Stewie',
+              value: 'stewie',
+            },
+            {
+              name: 'Brian',
+              value: 'brian',
+            },
+            {
+              name: 'Cleveland',
+              value: 'cleveland',
+            },
+            {
+              name: 'Quagmire',
+              value: 'quagmire',
+            },
+            {
+              name: 'Joe',
+              value: 'joe',
+            },
+          ],
+        },
+      ],
+    }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
   } else {
-  // @ts-ignore
-    client.application.commands
-      .create({
-        name: 'quote',
-        description: 'Get a random quote from Family Guy!',
-        options: [
-          {
-            name: 'Character',
-            description: 'A Character from the show',
-            type: 'STRING',
-            required: false,
-            choices: [
-              {
-                name: 'Peter',
-                value: 'peter',
-              },
-              {
-                name: 'Lois',
-                value: 'lois',
-              },
-              {
-                name: 'Chris',
-                value: 'chris',
-              },
-              {
-                name: 'Meg',
-                value: 'meg',
-              },
-              {
-                name: 'Stewie',
-                value: 'stewie',
-              },
-              {
-                name: 'Brian',
-                value: 'brian',
-              },
-              {
-                name: 'Cleveland',
-                value: 'cleveland',
-              },
-              {
-                name: 'Quagmire',
-                value: 'quagmire',
-              },
-              {
-                name: 'Joe',
-                value: 'joe',
-              },
-            ],
-          },
-        ],
-      }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+    client.application?.commands.create({
+      name: 'quote',
+      description: 'Get a random quote from Family Guy!',
+      options: [
+        {
+          name: 'Character',
+          description: 'A Character from the show',
+          type: 'STRING',
+          required: false,
+          choices: [
+            {
+              name: 'Peter',
+              value: 'peter',
+            },
+            {
+              name: 'Lois',
+              value: 'lois',
+            },
+            {
+              name: 'Chris',
+              value: 'chris',
+            },
+            {
+              name: 'Meg',
+              value: 'meg',
+            },
+            {
+              name: 'Stewie',
+              value: 'stewie',
+            },
+            {
+              name: 'Brian',
+              value: 'brian',
+            },
+            {
+              name: 'Cleveland',
+              value: 'cleveland',
+            },
+            {
+              name: 'Quagmire',
+              value: 'quagmire',
+            },
+            {
+              name: 'Joe',
+              value: 'joe',
+            },
+          ],
+        },
+      ],
+    }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
   }
 });
 
 // @ts-ignore
-client.on('interaction', (interaction) => {
+client.on('interaction', async (interaction) => {
   if (!interaction.isCommand()) return;
 
   if (interaction.commandName === 'quote') {
@@ -157,16 +153,19 @@ client.on('interaction', (interaction) => {
         // @ts-ignore
         const quote = quotes[c as string][Math.floor(Math.random() * quotes[c as string].length)];
         // @ts-ignore
-        interaction.reply(`${quote} - **${nameMap[c]}**`);
+        await interaction.reply(`"${quote}" - **${nameMap[c]}**`);
       }
     } else {
       const randomCharacter = randomProperty(quotes);
 
       const quote = randomCharacter[Math.floor(Math.random() * randomCharacter.length)];
       // @ts-ignore
-      interaction.reply(`${quote} - **${nameMap[getKeyByValue(quotes, randomCharacter)]}**`);
+      await interaction.reply(`"${quote}" - **${nameMap[getKeyByValue(quotes, randomCharacter)]}**`);
     }
   }
 });
 
-client.login(process.env.BOT_TOKEN);
+log.info('Logging in...');
+client.login(process.env.BOT_TOKEN).then(() => {
+  log.info('Logged in!');
+});
