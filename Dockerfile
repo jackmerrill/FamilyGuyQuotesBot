@@ -4,11 +4,7 @@ WORKDIR /usr/src/bot
 
 COPY package*.json ./
 
-RUN npm install -g typescript
-
-RUN npm install @types/node
-
-RUN npm ci --only=production
+RUN npm install
 
 COPY . .
 
