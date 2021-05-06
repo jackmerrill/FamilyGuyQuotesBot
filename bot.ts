@@ -88,7 +88,7 @@ client.on('ready', async () => {
           ],
         },
       ],
-    }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+    }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
   } else {
     client.application?.commands.create({
       name: 'quote',
@@ -139,7 +139,7 @@ client.on('ready', async () => {
           ],
         },
       ],
-    }).then(() => log.info('Command Loaded.')).catch((e) => log.error(e));
+    }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
   }
 });
 
