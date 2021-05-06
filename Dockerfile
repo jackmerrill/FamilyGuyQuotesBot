@@ -1,12 +1,10 @@
-FROM node:alpine
+FROM tarampampam/node:15-alpine
 
 WORKDIR /usr/src/bot
 
 COPY package*.json ./
 
-RUN npm install -g typescript
-
-RUN npm ci --only=production
+RUN yarn
 
 COPY . .
 
