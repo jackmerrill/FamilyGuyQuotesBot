@@ -154,15 +154,23 @@ client.on('interaction', async (interaction) => {
       if (c) {
         // @ts-ignore
         const quote = quotes[c as string][Math.floor(Math.random() * quotes[c as string].length)];
-        // @ts-ignore
-        await interaction.reply(`"${quote}" - **${nameMap[c]}**`);
+        try {
+          // @ts-ignore
+          await interaction.reply(`"${quote}" - **${nameMap[c]}**`);
+        } catch (e: any) {
+          log.error(e);
+        }
       }
     } else {
       const randomCharacter = randomProperty(quotes);
 
       const quote = randomCharacter[Math.floor(Math.random() * randomCharacter.length)];
-      // @ts-ignore
-      await interaction.reply(`"${quote}" - **${nameMap[getKeyByValue(quotes, randomCharacter)]}**`);
+      try {
+        // @ts-ignore
+        await interaction.reply(`"${quote}" - **${nameMap[getKeyByValue(quotes, randomCharacter)]}**`);
+      } catch (e: any) {
+        log.error(e);
+      }
     }
   }
 });
