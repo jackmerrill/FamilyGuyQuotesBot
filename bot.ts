@@ -36,6 +36,8 @@ const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES] });
 client.on('ready', async () => {
   log.info('Bot Started!');
 
+  client.user?.setActivity({ name: 'Family Guy on FOX', type: 'WATCHING' });
+
   if (process.env.NODE_ENV === 'development') {
     client.guilds.cache.get('468920088817565717')?.commands.create({
       name: 'quote',
