@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "discord.js": "vaporox/discord.js#feat-interactions",
+    "discord.js": "vaporox/discord.js",
     "dotenv": "^9.0.0",
     "tslog": "^3.2.0"
   },
