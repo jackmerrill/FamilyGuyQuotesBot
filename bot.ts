@@ -1,4 +1,4 @@
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, MessageEmbed } from 'discord.js';
 import { Logger } from 'tslog';
 import { config } from 'dotenv';
 import { quotes } from './quotes.json';
@@ -29,123 +29,105 @@ const nameMap = {
   joe: 'Joe Swanson',
 };
 
+function capitalizeFirstLetter(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 log.info('Starting bot...');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS] });
 
 client.on('ready', async () => {
   log.info('Bot Started!');
 
-  client.user?.setActivity({ name: `Family Guy on ${client.guilds.cache.size} guilds.`, type: 'WATCHING' });
+  client.user?.setActivity({ name: `Family Guy on ${client.guilds.cache.size} guilds with ${client.users.cache.size} users.`, type: 'WATCHING' });
 
   if (process.env.NODE_ENV === 'development') {
-    client.guilds.cache.get('468920088817565717')?.commands.create({
+    client.guilds.cache.get(process.env.DEV_GUILD as string)?.commands.create({
+      name: 'info',
+      description: 'Get info on the bot!',
+    }).then(() => log.info('Info Command Loaded.')).catch((e: any) => log.error(e));
+
+    client.guilds.cache.get(process.env.DEV_GUILD as string)?.commands.create({
       name: 'quote',
       description: 'Get a random quote from Family Guy!',
       options: [
         {
-          name: 'Character',
+          name: 'character',
           description: 'A Character from the show',
           type: 'STRING',
           required: false,
-          choices: [
-            {
-              name: 'Peter',
-              value: 'peter',
-            },
-            {
-              name: 'Lois',
-              value: 'lois',
-            },
-            {
-              name: 'Chris',
-              value: 'chris',
-            },
-            {
-              name: 'Meg',
-              value: 'meg',
-            },
-            {
-              name: 'Stewie',
-              value: 'stewie',
-            },
-            {
-              name: 'Brian',
-              value: 'brian',
-            },
-            {
-              name: 'Cleveland',
-              value: 'cleveland',
-            },
-            {
-              name: 'Quagmire',
-              value: 'quagmire',
-            },
-            {
-              name: 'Joe',
-              value: 'joe',
-            },
-          ],
+          choices: Object.keys(quotes).map((key) => ({
+            name: capitalizeFirstLetter(key),
+            value: key,
+          })),
         },
       ],
-    }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
+    }).then(() => log.info('Quote Command Loaded.')).catch((e: any) => log.error(e));
   } else {
+    client.application?.commands.create({
+      name: 'info',
+      description: 'Get info on the bot!',
+    }).then(() => log.info('Info Command Loaded.')).catch((e: any) => log.error(e));
+
     client.application?.commands.create({
       name: 'quote',
       description: 'Get a random quote from Family Guy!',
       options: [
         {
-          name: 'Character',
+          name: 'character',
           description: 'A Character from the show',
           type: 'STRING',
           required: false,
-          choices: [
-            {
-              name: 'Peter',
-              value: 'peter',
-            },
-            {
-              name: 'Lois',
-              value: 'lois',
-            },
-            {
-              name: 'Chris',
-              value: 'chris',
-            },
-            {
-              name: 'Meg',
-              value: 'meg',
-            },
-            {
-              name: 'Stewie',
-              value: 'stewie',
-            },
-            {
-              name: 'Brian',
-              value: 'brian',
-            },
-            {
-              name: 'Cleveland',
-              value: 'cleveland',
-            },
-            {
-              name: 'Quagmire',
-              value: 'quagmire',
-            },
-            {
-              name: 'Joe',
-              value: 'joe',
-            },
-          ],
+          choices: Object.keys(quotes).map((key) => ({
+            name: capitalizeFirstLetter(key),
+            value: key,
+          })),
         },
       ],
-    }).then(() => log.info('Command Loaded.')).catch((e: any) => log.error(e));
+    }).then(() => log.info('Quote Command Loaded.')).catch((e: any) => log.error(e));
   }
+});
+
+client.on('guildCreate', (guild) => {
+  log.info(`Joined Guild ${guild.name}(${guild.id}) with ${guild.memberCount} members.`);
+  client.user?.setActivity({ name: `Family Guy on ${client.guilds.cache.size} guilds.`, type: 'WATCHING' });
 });
 
 // @ts-ignore
 client.on('interaction', async (interaction) => {
   if (!interaction.isCommand()) return;
+
+  if (interaction.commandName === 'info') {
+    const date = new Date(client.uptime as number);
+    const days = date.getUTCDate() - 1;
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const seconds = date.getUTCSeconds();
+
+    const segments = [];
+
+    if (days > 0) segments.push(`${days} day${(days === 1) ? '' : 's'}`);
+    if (hours > 0) segments.push(`${hours} hour${(hours === 1) ? '' : 's'}`);
+    if (minutes > 0) segments.push(`${minutes} minute${(minutes === 1) ? '' : 's'}`);
+    if (seconds > 0) segments.push(`${seconds} second${(seconds === 1) ? '' : 's'}`);
+
+    const embed = new MessageEmbed();
+
+    embed.setTitle('Family Guy Bot Information');
+    embed.setAuthor(interaction.user.username, interaction.user.avatarURL() as string);
+    embed.addField('Version', '1.2.0', true);
+    embed.addField('Library', 'Discord.js', true);
+    embed.addField('Creator', 'AmusedGrape#0001', true);
+    embed.addField('Servers', client.guilds.cache.size, true);
+    embed.addField('Users', client.users.cache.size, true);
+    embed.addField('Invite', '[Click Here](https://discord.com/oauth2/authorize?client_id=839624581055774741&permissions=2048&scope=bot%20applications.commands)', true);
+    embed.addField('GitHub', '[Click Here](https://github.com/jackmerrill/FamilyGuyQuotesBot)', true);
+    embed.setFooter(`Uptime: ${segments.join(', ')}`);
+    embed.setColor('WHITE');
+
+    await interaction.reply(embed);
+  }
 
   if (interaction.commandName === 'quote') {
     if (interaction.options.length > 0) {
