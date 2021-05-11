@@ -35,7 +35,13 @@ function capitalizeFirstLetter(string: string) {
 
 log.info('Starting bot...');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS] });
+const client = new Client({
+  intents: [
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MEMBERS,
+  ],
+});
 
 client.on('ready', async () => {
   log.info('Bot Started!');
