@@ -1,4 +1,4 @@
-FROM tarampampam/node:15-alpine
+FROM node:18-alpine
 
 WORKDIR /usr/src/bot
 
