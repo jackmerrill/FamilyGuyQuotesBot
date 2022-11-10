@@ -37,16 +37,14 @@ log.info('Starting bot...');
 
 const client = new Client({
   intents: [
-    Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
   ],
 });
 
 client.on('ready', async () => {
   log.info('Bot Started!');
 
-  client.user?.setActivity({ name: `Family Guy on ${client.guilds.cache.size} guilds with ${client.guilds.cache.map((guild) => guild.memberCount).reduce((a, b) => a + b)} users.`, type: 'WATCHING' });
+  client.user?.setActivity({ name: `Family Guy on ${client.guilds.cache.size} guilds.`, type: 'WATCHING' });
 
   if (process.env.NODE_ENV === 'development') {
     client.guilds.cache.get(process.env.DEV_GUILD as string)?.commands.create({
@@ -126,7 +124,6 @@ client.on('interaction', async (interaction) => {
     embed.addField('Library', 'Discord.js', true);
     embed.addField('Creator', 'AmusedGrape#0001', true);
     embed.addField('Servers', client.guilds.cache.size, true);
-    embed.addField('Users', client.guilds.cache.map((guild) => guild.memberCount).reduce((a, b) => a + b), true);
     embed.addField('Invite', '[Click Here](https://discord.com/oauth2/authorize?client_id=839624581055774741&permissions=2048&scope=bot%20applications.commands)', true);
     embed.addField('GitHub', '[Click Here](https://github.com/jackmerrill/FamilyGuyQuotesBot)', true);
     embed.setFooter(`Uptime: ${segments.join(', ')}`);
